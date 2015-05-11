@@ -14,7 +14,7 @@ function kuma ( obj, name, arg ) {
 		},
 		set: function ( value ) {
 			fn = typeof value === "function";
-			arg = clone( value, fn );
+			cached = clone( value, fn );
 			result = undefined;
 		}
 	} );

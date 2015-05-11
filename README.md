@@ -17,11 +17,8 @@ x.abc; // "bar" <- string has been cached
 
 // Creating a lazy `Promise` via `fetch()`, re-executing this would clear a cached `Promise`
 kuma(x, "github", function () {
-  var data;
-
   return fetch("https://api.github.com/").then(function(response) {
-    return data || response.json().then(function (arg) {
-      data = arg;
+    return response.json().then(function (data) {
       return data;
     }, function (e) {
       throw e;
@@ -31,7 +28,7 @@ kuma(x, "github", function () {
   });
 });
 
-// Access the property "later", the response JSON is cached in the success handler
+// Access the property later when you need the wired data, it'll be cached until `x.github` is overridden
 x.github.then(function(data) {
   console.log(data);
 }, function (e) {
