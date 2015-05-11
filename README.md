@@ -28,7 +28,7 @@ kuma(x, "github", function () {
   });
 });
 
-// Access the property later when you need the wired data, it'll be cached until `x.github` is overridden
+// Access the property later; it'll be cached until `x.github` is overridden
 x.github.then(function(data) {
   console.log(data);
 }, function (e) {
