@@ -1,7 +1,7 @@
 {
   "name": "kuma",
   "description": "Lazy properties for Objects",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "homepage": "https://github.com/avoidwork/kuma",
   "author": {
     "name": "Jason Mulligan",
