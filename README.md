@@ -6,8 +6,8 @@ This is an easy way to delay going over the wire for an async value, or running 
 
 ## Example
 ```javascript
-var kuma = require("kuma");
-var x = {};
+const kuma = require("kuma");
+let x = {};
 
 kuma(x, "abc", "foo");
 x.abc; // "foo" <- string has been cached
@@ -17,14 +17,8 @@ x.abc; // "bar" <- string has been cached
 
 // Creating a lazy `Promise` via `fetch()`, re-executing this would clear a cached `Promise`
 kuma(x, "github", function () {
-  return fetch("https://api.github.com/").then(function(response) {
-    return response.json().then(function (data) {
-      return data;
-    }, function (e) {
-      throw e;
-    });
-  }, function (e) {
-    throw e;
+  return fetch("https://api.github.com/").then(function(res) {
+    return res.json();
   });
 });
 
@@ -40,5 +34,5 @@ x.github.then(function(data) {
 kuma supports AMD loaders (require.js, curl.js, etc.), node.js & npm (npm install kuma), or using a script tag.
 
 ## License
-Copyright (c) 2015 Jason Mulligan
+Copyright (c) 2016 Jason Mulligan
 Licensed under the BSD-3 license.

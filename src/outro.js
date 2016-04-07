@@ -2,15 +2,12 @@
 kuma.version = "{{VERSION}}";
 
 // CommonJS, AMD, script tag
-if ( typeof exports !== "undefined" ) {
+if (typeof exports !== "undefined") {
 	module.exports = kuma;
-}
-else if ( typeof define === "function" ) {
-	define( function () {
+} else if (typeof define === "function" && define.amd) {
+	define(function () {
 		return kuma;
-	} );
-}
-else {
+	});
+} else {
 	global.kuma = kuma;
-}
-} )( typeof global !== "undefined" ? global : window );
+}}(typeof window !== "undefined" ? window : global));

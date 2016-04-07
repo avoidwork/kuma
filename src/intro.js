@@ -1,2 +1,2 @@
-( function ( global ) {
+(function (global) {
 let defineProperty = Object.defineProperty;

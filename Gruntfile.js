@@ -1,21 +1,10 @@
-var figlet = require("figlet");
-
-function graffiti (arg) {
-	return figlet.textSync(arg, {
-		font: 'Graffiti',
-		horizontalLayout: 'default',
-		verticalLayout: 'default'
-	})
-}
-
 module.exports = function (grunt) {
-	var banner = graffiti("kuma " + grunt.file.readJSON("package.json").version);
-
 	grunt.initConfig({
 		pkg : grunt.file.readJSON("package.json"),
 		babel: {
 			options: {
 				compact: false,
+				presets: ["babel-preset-es2015"],
 				sourceMap: false
 			},
 			dist: {
@@ -26,7 +15,7 @@ module.exports = function (grunt) {
 		},
 		concat : {
 			options : {
-				banner : '/*\n' + banner + '\n\n<%= grunt.template.today("yyyy") %> <%= pkg.author.name %> <<%= pkg.author.email %>>\n*/\n'
+				banner : '/*\n<%= grunt.template.today("yyyy") %> <%= pkg.author %>\n*/\n'
 			},
 			dist : {
 				src : [
@@ -38,15 +27,16 @@ module.exports = function (grunt) {
 				dest : "lib/<%= pkg.name %>.es6.js"
 			}
 		},
+		eslint: {
+			target: ["lib/<%= pkg.name %>.es6.js"]
+		},
 		nodeunit : {
 			all : ["test/*.js"]
 		},
+		nsp: {
+			package: grunt.file.readJSON("package.json")
+		},
 		sed : {
-			banner : {
-				pattern : "{{BANNER}}",
-				replacement : JSON.stringify(banner.split("\n")),
-				path : ["<%= concat.dist.dest %>"]
-			},
 			version : {
 				pattern : "{{VERSION}}",
 				replacement : "<%= pkg.version %>",
@@ -55,11 +45,11 @@ module.exports = function (grunt) {
 		},
 		uglify: {
 			options: {
-				banner: '/*\n' + banner + '\n\n<%= grunt.template.today("yyyy") %> <%= pkg.author.name %> <<%= pkg.author.email %>>\n*/\n',
+				banner: '/*\n<%= grunt.template.today("yyyy") %> <%= pkg.author %>\n*/\n',
 				sourceMap: true,
 				sourceMapIncludeSources: true,
 				mangle: {
-					except: ["keigai", "define", "export", "process", "array", "regex", "store", "string", "utility"]
+					except: ["kuma", "define", "export", "process"]
 				}
 			},
 			target: {
@@ -87,9 +77,11 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks("grunt-contrib-watch");
 	grunt.loadNpmTasks("grunt-contrib-uglify");
 	grunt.loadNpmTasks("grunt-babel");
+	grunt.loadNpmTasks("grunt-nsp");
+	grunt.loadNpmTasks("grunt-eslint");
 
 	// aliases
-	grunt.registerTask("test", ["nodeunit"]);
+	grunt.registerTask("test", ["eslint", "nodeunit", "nsp"]);
 	grunt.registerTask("build", ["concat", "sed", "babel"]);
 	grunt.registerTask("default", ["build", "test", "uglify"]);
 };
