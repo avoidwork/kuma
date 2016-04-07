@@ -3,7 +3,7 @@ function kuma (obj, name, arg) {
 	let cached = clone(arg, fn);
 	let result;
 
-	defineProperty(obj, name, {
+	Object.defineProperty(obj, name, {
 		enumerable: true,
 		get: function () {
 			if (result === undefined) {
